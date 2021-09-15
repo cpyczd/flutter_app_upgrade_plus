@@ -3,16 +3,16 @@ import 'package:flutter_app_upgrade_plus/src/wave.dart';
 
 class LiquidLinearProgressIndicator extends ProgressIndicator {
   ///The width of the border, if this is set [borderColor] must also be set.
-  double? borderWidth;
+  final double? borderWidth;
 
   ///The color of the border, if this is set [borderWidth] must also be set.
-  Color? borderColor;
+  final Color? borderColor;
 
   ///The radius of the border.
   final double borderRadius;
 
   ///The widget to show in the center of the progress indicator.
-  Widget? center;
+  final Widget? center;
 
   ///The direction the liquid travels.
   final Axis direction;
@@ -94,7 +94,7 @@ class _LinearPainter extends CustomPainter {
     canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius ?? 0),
+          Radius.circular(radius),
         ),
         paint);
   }
@@ -116,20 +116,16 @@ class _LinearBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (color == null || width == null) {
-      return;
-    }
-
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = width;
-    final alteredRadius = radius ?? 0;
+    final alteredRadius = radius;
     canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(
               width / 2, width / 2, size.width - width, size.height - width),
-          Radius.circular(alteredRadius - width ?? 0),
+          Radius.circular(alteredRadius - width),
         ),
         paint);
   }
@@ -152,7 +148,7 @@ class _LinearClipper extends CustomClipper<Path> {
       ..addRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius ?? 0),
+          Radius.circular(radius),
         ),
       );
     return path;
