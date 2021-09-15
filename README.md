@@ -7,10 +7,6 @@
 
 1、在`pubspec.yaml`中加入：
 
-```
-dependencies:
-  flutter_app_upgrade_plus: ^1.1.0
-```
 
 2、执行flutter命令获取包：
 ```
