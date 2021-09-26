@@ -39,7 +39,7 @@ public class FlutterAppUpgradePlugin : FlutterPlugin, MethodCallHandler, Activit
 
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    val channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_app_upgrade")
+    val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_app_upgrade")
     channel.setMethodCallHandler(FlutterAppUpgradePlugin())
   }
 
@@ -59,7 +59,7 @@ public class FlutterAppUpgradePlugin : FlutterPlugin, MethodCallHandler, Activit
     if (call.method == "getAppInfo") {
       getAppInfo(mContext, result)
     } else if (call.method == "getApkDownloadPath") {
-      result.success(mContext.getExternalFilesDir("").absolutePath)
+      result.success(mContext.getExternalFilesDir("")!!.absolutePath)
     } else if (call.method == "install") {
       //安装app
       val path = call.argument<String>("path")
@@ -124,7 +124,7 @@ public class FlutterAppUpgradePlugin : FlutterPlugin, MethodCallHandler, Activit
       if (nameEmpty || classEmpty) {
         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
       } else {
-        goToMarket.setClassName(marketPackageName, marketClassName)
+        goToMarket.setClassName(marketPackageName!!, marketClassName!!)
       }
       context.startActivity(goToMarket)
     } catch (e: ActivityNotFoundException) {
@@ -156,7 +156,7 @@ public class FlutterAppUpgradePlugin : FlutterPlugin, MethodCallHandler, Activit
     val manager = context.packageManager
     val intent = Intent().setPackage(packageName)
     val infos = manager.queryIntentActivities(intent,
-            PackageManager.GET_INTENT_FILTERS)
+            PackageManager.MATCH_DEFAULT_ONLY)
     return if (infos == null || infos.size < 1) {
       false
     } else {

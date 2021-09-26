@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:flutter_app_upgrade_plus/flutter_app_upgrade.dart';
 
 import 'download_status.dart';
@@ -157,11 +161,66 @@ class AppUpgrade {
 }
 
 class AppInfo {
-  AppInfo({this.versionName, this.versionCode, this.packageName});
+  final String? versionName;
+  final String? versionCode;
+  final String? packageName;
 
-  String? versionName;
-  String? versionCode;
-  String? packageName;
+  AppInfo({
+    this.versionName,
+    this.versionCode,
+    this.packageName,
+  });
+
+  AppInfo copyWith({
+    String? versionName,
+    String? versionCode,
+    String? packageName,
+  }) {
+    return AppInfo(
+      versionName: versionName ?? this.versionName,
+      versionCode: versionCode ?? this.versionCode,
+      packageName: packageName ?? this.packageName,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'versionName': versionName,
+      'versionCode': versionCode,
+      'packageName': packageName,
+    };
+  }
+
+  factory AppInfo.fromMap(Map<String, dynamic> map) {
+    return AppInfo(
+      versionName: map['versionName'],
+      versionCode: map['versionCode'],
+      packageName: map['packageName'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AppInfo.fromJson(String source) =>
+      AppInfo.fromMap(json.decode(source));
+
+  @override
+  String toString() =>
+      'AppInfo(versionName: $versionName, versionCode: $versionCode, packageName: $packageName)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AppInfo &&
+        other.versionName == versionName &&
+        other.versionCode == versionCode &&
+        other.packageName == packageName;
+  }
+
+  @override
+  int get hashCode =>
+      versionName.hashCode ^ versionCode.hashCode ^ packageName.hashCode;
 }
 
 class AppUpgradeInfo {
@@ -190,6 +249,10 @@ class AppUpgradeInfo {
   /// 是否强制升级
   ///
   final bool force;
+
+  @override
+  String toString() =>
+      'AppUpgradeInfo(title: $title, contents: $contents, force: $force apkDownloadUrl: $apkDownloadUrl)';
 }
 
 ///
